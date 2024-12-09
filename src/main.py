@@ -1,7 +1,6 @@
-from otp import ft_totp
 import argparse
 import sys
-from key_manager import save_key
+from key_manager import save_key, generate_code_from_key
 
 def parse_args():
 	parser = argparse.ArgumentParser(description="ft_otp arguments")
@@ -24,11 +23,8 @@ if __name__ == "__main__":
 
 		if args.g:
 			save_key(args.g)
-			pass
 		elif args.k:
-			#generate code with key
-			print("key to generate code: ", args.k)
-			pass
+			generate_code_from_key(args.k)
 
 	except Exception as e:
 		print(e)
