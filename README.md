@@ -99,6 +99,33 @@ Refer to the detailed steps above for generating an HOTP.
 4. **Reduce the code to the desired number of digits:**
    - Take `code % 10^d` to reduce to 6 digits.
 
+## Pseudo-code
+
+```
+function HOTP(K, C, d):
+    # Step 1: Convert the counter to an 8-byte binary value
+    C_bin = to_8_byte_binary(C)
+    
+    # Step 2: Compute the HMAC-SHA1 of the key and counter
+    HMAC = HMAC_SHA1(K, C_bin)
+    
+    # Step 3: Dynamic Truncation
+    # Get the last 4 bits of the HMAC to find the offset
+    o = HMAC[19] & 0x0F  # HMAC[19] is the last byte; & 0x0F keeps the last 4 bits
+    
+    # Extract 4 bytes starting at the offset
+    binary_code = (HMAC[o] & 0x7F) << 24 |  # First byte (remove sign bit)
+                  (HMAC[o+1] & 0xFF) << 16 | # Second byte
+                  (HMAC[o+2] & 0xFF) << 8  | # Third byte
+                  (HMAC[o+3] & 0xFF)        # Fourth byte
+    
+    # Step 4: Reduce to desired number of digits
+    OTP = binary_code % (10 ** d)
+    
+    return OTP
+```
+
+
 
   <h2>License</h2>
   <p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
