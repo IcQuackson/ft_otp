@@ -32,8 +32,10 @@
   </p>
   <p>Usage:</p>
   <pre>
-    <code>ft_otp -g [-o <output_file>] [-t <time_step>]
-    ft_otp -k [-f <key_file>]</code>
+    <code>
+      ft_otp -g file_with_hexadecimal_key.txt
+      ft_otp -k key_file.key
+    </code>
   </pre>
   <p> <strong>-g:</strong> The program receives as argument a hexadecimal key of at least 64 characters. The program stores this key safely in a file called ft_otp.key, which
     is encrypted.</p>
