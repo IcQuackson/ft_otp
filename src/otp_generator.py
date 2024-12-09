@@ -18,11 +18,8 @@ def ft_totp(key):
 	time_counter = (current_time - EPOCH) // TIME_STEP
 	time_counter_bin = struct.pack(">Q", time_counter) # '>Q' means big-endian unsigned long long (8 bytes)
 
-	# Create hmac-sha1 object
-	hmac_sha1 = hmac.new(key_bin, time_counter_bin, hashlib.sha1)
-
 	# Result in bytes
-	hmac_result =  hmac_sha1.digest()
+	hmac_result =  ft_hmac_sha1(key_bin, time_counter_bin)
 
 	# Get last nibble
 	offset = hmac_result[-1] & 0x0F
@@ -39,3 +36,23 @@ def ft_totp(key):
 	totp_str = f'{code:06d}'  # Format as a zero-padded 6-digit string
 
 	return totp_str
+
+def ft_hmac_sha1(key, message):
+    # Block size of SHA-1 is 64 bytes
+    block_size = 64
+    
+    # Ensure the key is of appropriate size
+    if len(key) > block_size:
+        key = hashlib.sha1(key).digest()  # Hash key if it's too long
+    if len(key) < block_size:
+        key = key + b'\x00' * (block_size - len(key))  # Pad key with zeros
+
+    # Create inner and outer pads
+    ipad = bytes((x ^ 0x36) for x in key)
+    opad = bytes((x ^ 0x5C) for x in key)
+
+    # Perform HMAC operation
+    inner_hash = hashlib.sha1(ipad + message).digest()
+    hmac_result = hashlib.sha1(opad + inner_hash).digest()
+
+    return hmac_result
