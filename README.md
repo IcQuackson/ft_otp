@@ -19,6 +19,13 @@
       <img alt="42" src="https://i.imgur.com/FBTPTt0.png" width="300px"/>
     </div>
   </div>
+
+  <h2>What is HOTP?</h2>
+  <p>HOTP is a method to generate a one-time password using a secret key and a counter to ensure secure authentication.</p>
+
+  <h2>Why is it important?</h2>
+  <p>It prevents password reuse and ensures that each login attempt is unique, enhancing security against unauthorized access.</p>
+  
   <h2>How it works</h2>
   <p>
     This program allows you to store an initial password in file and is also capable of generating a new one time password every time it is requested.
@@ -26,51 +33,34 @@
   <p>Usage:</p>
   <pre>
     <code>ft_otp -g [-o <output_file>] [-t <time_step>]
-ft_otp -k [-f <key_file>]
+    ft_otp -k [-f <key_file>]</code>
   </pre>
-  <ul>
-    <li><strong>-r:</strong> Recursively download images from the provided URL.</li>
-    <li><strong>-r -l [N]:</strong> Set maximum depth level for recursive download (default: 5).</li>
-    <li><strong>-p [PATH]:</strong> Set path for downloaded files (default: ./data/).</li>
-  </ul>
-  <p>Default file extensions downloaded:</p>
-  <ul>
-    <li>.jpg/jpeg</li>
-    <li>.png</li>
-    <li>.gif</li>
-    <li>.bmp</li>
-  </ul>
-
-  <h2>Scorpion Program</h2>
-  <p>The scorpion program parses image files for EXIF and other metadata.</p>
-  <p>Usage:</p>
+  <p> <strong>-g:</strong> The program receives as argument a hexadecimal key of at least 64 characters. The program stores this key safely in a file called ft_otp.key, which
+    is encrypted.</p>
+  <p> <strong>-k:</strong> The program generates a new temporary password based on the key given</p>
+  <p>Below is an example of use:</p>
   <pre>
-    <code>./scorpion FILE1 [FILE2 ...]</code>
+    <code>
+      $ echo -n "NEVER GONNA GIVE YOU UP" > key.txt
+      $ ./ft_otp -g key.txt
+      ./ft_otp: error: key must be 64 hexadecimal characters.
+      $ [..]
+      $ cat key.hex | wc -c
+      64
+      $ ./ft_otp -g key.hex
+      Key was successfully saved in ft_otp.key.
+      $ ./ft_otp -k ft_otp.key
+      836492
+      $ sleep 60
+      $ ./ft_otp -k ft_otp.key
+      123518
+    </code>
   </pre>
-  <p>Basic attributes displayed:</p>
-  <ul>
-    <li>Creation date</li>
-    <li>EXIF data</li>
-  </ul>
 
-  <h2>What is EXIF (Exchangeable image file format)</h2>
-  <p>It's a standard that specifies information added to images and sound used by cameras, scanners and other systems that handle this type of data.</p>
-  <p>It covers a broad spectrum of information such as:</p>
-  <li>Camera Settings</li>
-  <li>Image metrics</li>
-  <li>Date and time information</li>
-  <li>Location information</li>
-  <li>Descriptions</li>
-  <li>Copyright information</li>
-
-  <h2>Why is EXIF relevant?</h2>
-  <p>Since the Exif tag contains metadata about the photo, it can pose a privacy problem.</p>
-  <p>For example users are usually unaware that when a photo is shared it may potentially reveal the exact location and time it was taken and this is all done by default.</p>
-  <p>The privacy problem of Exif data can be avoided by removing the Exif data using a metadata removal tool.</p>
-
-  <h2>Implementation Details</h2>
-  <p>Both programs must be developed without using wget or scrapy.</p>
-  <p>Functions or libraries for HTTP requests and file handling are allowed. The rest is forbidden.</p>
+  <h2>Features</h2>
+  <p>The program uses the HOTP algorithm <a href="https://www.ietf.org/rfc/rfc4226.txt">RFC 4226</a></p>
+  <p>The generated one-time password is random and always contains the same format, i.e. 6 digits.</p>
+  <p>The program creates a QR Code with seed generation.</p>
 
   <h2>License</h2>
   <p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
