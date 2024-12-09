@@ -6,7 +6,7 @@ import time
 TIME_STEP = 30
 EPOCH = 0
 
-def totp(key):
+def ft_totp(key):
 	key_bin = bytes.fromhex(key)
 	current_time = int(time.time())
 	time_counter = (current_time - EPOCH) // TIME_STEP
@@ -45,12 +45,4 @@ def totp(key):
 
 	print(totp_str)
 
-
-
-
-
-key = "75ee7604145f8ee3ebbacd719a7d836fb44edb6c17dc6572cc5c455e0b12f433"
-
-totp(key)
-#print(otp)
 

@@ -1,3 +1,4 @@
 *.hex
 *.key
 *.txt
+__pycache__
