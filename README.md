@@ -21,7 +21,7 @@
   </div>
 
 
-## What is HOTP?
+## What is TOTP?
 
 TOTP (Time-Based One-Time Password) is a method to generate a one-time password using a secret key and a time counter to ensure secure authentication.
 
