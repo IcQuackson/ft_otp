@@ -1,8 +1,6 @@
 import hashlib
-import hmac
 import struct
 import time
-import os
 
 TIME_STEP = 30
 EPOCH = 0

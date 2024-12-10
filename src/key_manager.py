@@ -1,6 +1,7 @@
 import os
 from utils import is_file_valid, create_or_replace_file_with_content, create_qr_code
 from otp_generator import ft_totp
+from ft_encryption import save_encrypted_secret, load_encrypted_secret
 
 MINIMUM_KEY_LEN = 32
 OUTPUT_KEY_NAME = "ft_otp.key"
@@ -8,6 +9,7 @@ ALLOWED_KEY_TO_SAVE_FILE_EXTENSIONS = ('.txt')
 ALLOWED_KEY_TO_GENERATE_FILE_EXTENSIONS = ('.key')
 SAVE = 'SAVE'
 GENERATE = 'GENERATE'
+SUPER_SECURE_PASSWORD = 'SUPER_SECURE_PASSWORD' # Example placeholder for the password
 
 """
 Checks if the key is valid
@@ -66,6 +68,7 @@ def save_key(key_path, key):
 	if not key:
 		key = extract_key(key_path, SAVE)
 	create_or_replace_file_with_content(OUTPUT_KEY_NAME, key)
+	save_encrypted_secret(key, SUPER_SECURE_PASSWORD, OUTPUT_KEY_NAME)
 	create_qr_code(key)
 
 	print(f'Key saved in {OUTPUT_KEY_NAME}')
@@ -75,7 +78,7 @@ Generates a code from a key
 @param key_path: path to the file containing the key
 """
 def generate_code_from_key(key_path):
-	key = extract_key(key_path, GENERATE)
+	key = load_encrypted_secret(SUPER_SECURE_PASSWORD, key_path).decode()
 	code = ft_totp(key)
 	print(code)
 
