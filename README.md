@@ -12,7 +12,7 @@
     </h1>
     <h3 align="center">
       <i>
-    	  Introductory project to the notion of OTP with the use of the RFC HOTP. 
+    	  Introductory project to the notion of OTP with the use of RFC TOTP and the RFC HOTP. 
       </i>
     </h3>
     <div align="center">
@@ -23,7 +23,7 @@
 
 ## What is HOTP?
 
-HOTP (HMAC-Based One-Time Password) is a method to generate a one-time password using a secret key and a counter to ensure secure authentication.
+TOTP (Time-Based One-Time Password) is a method to generate a one-time password using a secret key and a time counter to ensure secure authentication.
 
 ## Why is it important?
 
@@ -36,12 +36,14 @@ This program allows you to store an initial password in a file and is also capab
 ### Usage:
 
 ```
-ft_otp -g file_with_hexadecimal_key.txt
-ft_otp -k key_file.key
+python3 main.py -g file_with_hexadecimal_key.txt
+python3 main.py -k key_file.key
+python3 main.py -s
 ```
 
 - **`-g:`** The program receives as an argument a hexadecimal key of at least 64 characters. The program stores this key safely in a file called `ft_otp.key`, which is encrypted.
 - **`-k:`** The program generates a new temporary password based on the key given.
+- **`-s:`** The program generates randomizes a key and a QR Code compatible with Google Authenticator.
 
 Below is an example of use:
 
@@ -53,7 +55,8 @@ $ [..]
 $ cat key.hex | wc -c
 64
 $ ./ft_otp -g key.hex
-Key was successfully saved in ft_otp.key.
+QR Code saved in qrcode.png
+Key saved in ft_otp.key
 $ ./ft_otp -k ft_otp.key
 836492
 $ sleep 60
@@ -63,7 +66,7 @@ $ ./ft_otp -k ft_otp.key
 
 ## Features
 
-- The program uses the HOTP algorithm as described in [RFC 4226](https://www.ietf.org/rfc/rfc4226.txt).
+- The program uses the TOTP algorithm as described in [RFC 4226](https://www.ietf.org/rfc/rfc4226.txt) and is based on the HOTP algorithm as describe in [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238).
 - The generated one-time password is random and always contains the same format, i.e., 6 digits.
 - The program creates a QR Code with seed generation.
 
@@ -72,13 +75,13 @@ $ ./ft_otp -k ft_otp.key
 ### Key components:
 
 - **Secret Key (K):** A shared private key known by both the client (user) and the server.
-- **Counter (C):** A moving number, incremented each time a password is generated. Both the client and server must keep the same counter.
+- **Time counter (C):** A time counter obtained by accessing the system time.
 - **HMAC-SHA1:** A cryptographic function used to combine the secret key and counter into a hash.
 - **Digits (d):** The length of the OTP (6 digits in our case).
 
-### Steps to generate an HOTP:
+### Steps to generate an TOTP:
 
-Refer to the detailed steps above for generating an HOTP.
+Refer to the detailed steps above for generating an TOTP.
 
 
 1. **Take the counter value:**
